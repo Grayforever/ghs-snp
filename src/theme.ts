@@ -45,8 +45,8 @@ const theme = createTheme({
             padding: "1px 20px",
             fontSize: 12,
             textTransform: "capitalize",
-            whiteSpace:"nowrap",
-            textAlign:"center",
+            whiteSpace: "nowrap",
+            textAlign: "center",
             "&:hover": {
               backgroundColor: "#D4F7E8",
               color: "#4F9A0A",
