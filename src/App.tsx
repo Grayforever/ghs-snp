@@ -5,13 +5,13 @@ import Footer from "./components/footer";
 import ScrollToTop from "./components/scrollToTop";
 import { Suspense } from "react";
 import Lottie from "lottie-react";
-import loader from "./assets/json/loader.json";
+import Loader from "./assets/json/loader.json";
 
 function AppLayout() {
   return (
     <>
       <NavBar />
-      <Suspense fallback={<Lottie animationData={loader} />}>
+      <Suspense fallback={<Lottie animationData={Loader} />}>
         <Outlet />
       </Suspense>
       <Footer />

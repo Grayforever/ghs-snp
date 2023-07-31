@@ -21,8 +21,9 @@ const TextIcon = (props: TextIconProps) => {
           borderRadius: 2,
           width: 32,
           height: 32,
-          backgroundColor: props.variant === "secondary" && "primary.main",
-          color: props.variant === "secondary" && "white",
+          backgroundColor:
+            props.variant === "secondary" ? "primary.main" : "initial",
+          color: props.variant === "secondary" ? "white" : "initial",
         }}
       >
         {props.icon}
@@ -30,8 +31,8 @@ const TextIcon = (props: TextIconProps) => {
       <Typography
         textAlign={props.textAlign}
         sx={{
-          fontWeight: props.variant === "secondary" && "bold",
-          fontSize: props.variant === "secondary" && 24,
+          fontWeight: props.variant === "secondary" ? "bold" : "initial",
+          fontSize: props.variant === "secondary" ? 24 : "initial",
         }}
       >
         {props.label}

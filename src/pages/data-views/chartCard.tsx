@@ -36,7 +36,7 @@ const ChartCard = (props: ChartCardTypes) => {
           justifyContent={"space-between"}
           spacing={{ xs: 1, md: 2 }}
         >
-          <Box color={props.hideBorder ?? "text.secondary"}>
+          <Box color={props.hideBorder ? "text.secondary":"initial"}>
             <Typography
               fontWeight={"bold"}
               sx={{ fontSize: { xs: 12, md: 16 } }}

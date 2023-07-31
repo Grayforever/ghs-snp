@@ -125,7 +125,7 @@ const BlogCard: React.FC<CardPropTypes> = (props: CardPropTypes) => {
       elevation={0}
     >
       <CardActionArea onClick={handleCardClick}>
-        <CardContent sx={{ padding: props.noAnimation && isSmallScreen && 0 }}>
+        <CardContent sx={{ padding: props.noAnimation && isSmallScreen ? 0:undefined }}>
           <motion.div
             className={classes.container}
             whileHover={
