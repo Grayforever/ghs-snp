@@ -1,15 +1,17 @@
-import About from "./about";
-import Blog from "./blog";
-import BlogDetails from "./blog/blogDetails";
-import DataViews from "./data-views";
-import Faq from "./faq";
-import FaqDetails from "./faq/faqDetails";
-import Fund from "./fund";
-import Home from "./home";
-import Learn from "./learn";
-import LearnDetails from "./learn/leardDetails";
-import LetsTalk from "./lets-talk";
-import Regional from "./regional";
+import { lazy } from "react";
+
+const About = lazy(() => import("./about"));
+const Blog = lazy(() => import("./blog"));
+const BlogDetails = lazy(() => import("./blog/blogDetails"));
+const DataViews = lazy(() => import("./data-views"));
+const Faq = lazy(() => import("./faq"));
+const FaqDetails = lazy(() => import("./faq/faqDetails"));
+const Fund = lazy(() => import("./fund"));
+const Home = lazy(() => import("./home"));
+const Learn = lazy(() => import("./learn"));
+const LearnDetails = lazy(() => import("./learn/leardDetails"));
+const LetsTalk = lazy(() => import("./lets-talk"));
+const Regional = lazy(() => import("./regional"));
 
 const routes = [
   { path: "/", exact: true, name: "Home", index: true, element: Home },

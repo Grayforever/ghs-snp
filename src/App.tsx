@@ -3,12 +3,17 @@ import routes from "./pages/routes";
 import NavBar from "./components/navBar";
 import Footer from "./components/footer";
 import ScrollToTop from "./components/scrollToTop";
+import { Suspense } from "react";
+import Lottie from "lottie-react";
+import loader from "./assets/json/loader.json";
 
 function AppLayout() {
   return (
     <>
       <NavBar />
-      <Outlet />
+      <Suspense fallback={<Lottie animationData={loader} />}>
+        <Outlet />
+      </Suspense>
       <Footer />
     </>
   );

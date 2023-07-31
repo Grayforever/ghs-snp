@@ -14,6 +14,10 @@ import StoryCard from "./storyCard";
 import Carousel from "react-material-ui-carousel";
 import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
 import * as React from "react";
+import SwipeableGrid from "../../components/swipeableGrid";
+import BlogBg1 from "../../assets/images/blog_bg1.png";
+import BlogBg2 from "../../assets/images/blog_bg2.png";
+import BlogBg3 from "../../assets/images/blog_bg3.png";
 
 const achievements = [
   { count: 105, year: "2023" },
@@ -39,6 +43,24 @@ const stories = [
     region: "Central Region",
     story:
       "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata",
+  },
+];
+
+const blogs = [
+  {
+    id: 1,
+    title: "How to Avoid Teenage Preganacy",
+    bgImage: BlogBg1,
+  },
+  {
+    id: 2,
+    title: "How to Counsel a Teenager",
+    bgImage: BlogBg2,
+  },
+  {
+    id: 3,
+    title: "How to Avoid Teenage Preganacy",
+    bgImage: BlogBg3,
   },
 ];
 
@@ -151,10 +173,10 @@ const Home = () => {
       >
         <Image
           src={SafetyNet}
-          width={"40%"}
+          height={250}
           sx={{ display: { xs: "none", md: "initial" } }}
         />
-        <Box flex={1}>
+        <Stack flex={1} justifyContent={"center"}>
           <Typography textAlign={"center"} color={"primary"}>
             WHAT WE HAVE BEEN DOING
           </Typography>
@@ -176,7 +198,15 @@ const Home = () => {
               </React.Fragment>
             ))}
           </Carousel>
-        </Box>
+          <Typography
+            textAlign={"center"}
+            variant="caption"
+            color={"text.secondary"}
+          >
+            This is an estimated number of pregnant girls, tracked from
+            facilities across the nation.
+          </Typography>
+        </Stack>
       </Stack>
 
       <Stack
@@ -254,6 +284,13 @@ const Home = () => {
             <Typography textAlign={"center"} color={"primary"}>
               Whats Happening…
             </Typography>
+            <SwipeableGrid
+              isBlog={true}
+              spacing={1}
+              items={blogs}
+              orientation="vertical"
+              itemsPerSwipe={3}
+            />
           </Stack>
         </Stack>
       </Stack>

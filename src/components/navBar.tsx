@@ -12,7 +12,7 @@ import {
   Stack,
 } from "@mui/material";
 import routes from "../pages/routes";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { MenuRounded } from "@mui/icons-material";
 import Logo from "../assets/images/ghs_logo.png";
 import Image from "./image";
@@ -143,8 +143,17 @@ const NavBar = () => {
                   <Button
                     variant="contained"
                     color={"secondary"}
-                    href={"/lets-talk"}
-                    sx={{ ml: 2, mt: 4 }}
+                    component={NavLink}
+                    to={"/lets-talk"}
+                    sx={{
+                      ml: 2,
+                      mt: 4,
+                      "&.active": {
+                        backgroundColor: (theme) => theme.palette.primary.light,
+                        borderColor: (theme) => theme.palette.primary.main,
+                        color: (theme) => theme.palette.primary.main,
+                      },
+                    }}
                   >
                     Let's Talk
                   </Button>
@@ -164,14 +173,26 @@ const NavBar = () => {
           >
             {routes.map((page) => {
               return page.headernav ? (
-                <Button key={page.name} variant="text" href={page.path}>
+                <Button
+                  key={page.name}
+                  variant="text"
+                  component={NavLink}
+                  to={page.path}
+                  sx={{
+                    "&.active": {
+                      borderBottom: (theme) =>
+                        `1px solid ${theme.palette.primary.main}`,
+                    },
+                  }}
+                >
                   {page.name}
                 </Button>
               ) : null;
             })}
             <Button
               variant="contained"
-              href={"/lets-talk"}
+              component={NavLink}
+              to={"/lets-talk"}
               sx={{
                 display: {
                   xs: "none",

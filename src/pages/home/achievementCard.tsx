@@ -1,11 +1,12 @@
 import { Box, Stack, Theme, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+
 const useStyles = makeStyles((theme: Theme) => ({
   circle: {
     borderRadius: "50%",
     border: `1px solid ${theme.palette.primary.main}`,
-    minWidth: 80,
-    minHeight: 80,
+    minWidth: 100,
+    minHeight: 100,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -32,10 +33,10 @@ const AchievementCard = ({
         <Typography variant="h2" fontWeight={"bold"}>
           {count}
         </Typography>
-        <Typography variant="h6">Girls</Typography>
+        <Typography variant="h4">Girls</Typography>
       </Stack>
       <Box className={classes.circle}>
-        <Typography variant="h5" fontWeight={"bold"}>
+        <Typography variant="h4" fontWeight={"bold"}>
           {year}
         </Typography>
       </Box>

@@ -1,4 +1,8 @@
-import { Card, CardContent, Typography, Stack } from "@mui/material";
+import { Card, CardContent, Typography, Stack, Theme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {},
+}));
 
 const positionMe = {
   position: "relative",
@@ -12,6 +16,7 @@ type LeaderCardTypes = {
   sup?: string;
 };
 const LeaderCard = (props: LeaderCardTypes) => {
+  const classes = useStyles();
   return (
     <Card
       sx={{
@@ -20,11 +25,11 @@ const LeaderCard = (props: LeaderCardTypes) => {
         maxWidth: { xs: 184, md: 264 },
         minWidth: { xs: 184, md: 264 },
         height: 360,
-        ...(props.first || positionMe),
+        ...(props.first ? null : positionMe),
       }}
     >
       <CardContent>
-        <Stack>
+        <Stack alignItems={"center"}>
           <Typography fontWeight={"bold"}>Western North</Typography>
           <Stack
             sx={{ height: props.first ? 220 : 160 }}

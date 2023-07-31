@@ -18,6 +18,7 @@ import TwitterIcon from "../assets/svg/twitterIcon";
 import InstagramIcon from "../assets/svg/instagramIcon";
 import YoutubeIcon from "../assets/svg/youtubeIcon";
 import TextIcon from "./textIcon";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -74,10 +75,20 @@ const Footer = () => {
           <Typography fontWeight={"bold"} variant="h6" textAlign={"start"}>
             HELPFUL LINKS
           </Typography>
-          <Button variant={"text"} color={"secondary"} href="/fund">
+          <Button
+            variant={"text"}
+            color={"secondary"}
+            component={NavLink}
+            to="/fund"
+          >
             Fund
           </Button>
-          <Button variant={"text"} color={"secondary"} href="/faq">
+          <Button
+            variant={"text"}
+            color={"secondary"}
+            component={NavLink}
+            to="/faq"
+          >
             FAQ
           </Button>
           <Button

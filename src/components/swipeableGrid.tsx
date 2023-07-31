@@ -6,16 +6,27 @@ import {
   Stack,
   Typography,
   Divider,
+  Avatar,
+  ButtonBase,
 } from "@mui/material";
-import { useState } from "react";
-import { ArrowBackRounded, ArrowForwardRounded } from "@mui/icons-material";
+import { useState, useCallback } from "react";
+import {
+  ArrowBackRounded,
+  ArrowForwardRounded,
+  ArrowUpwardRounded,
+  ArrowDownwardOutlined,
+} from "@mui/icons-material";
 import * as React from "react";
 import MissionCard from "../pages/about/missionCard";
+import { useNavigate } from "react-router-dom";
 
 type OverviewDataTypes = {
-  region: string;
-  population: string;
-  adolescents: string;
+  id?: number;
+  region?: string;
+  population?: string;
+  adolescents?: string;
+  title?: string;
+  bgImage?: string;
 };
 
 type SwipeableGridProps = {
@@ -23,7 +34,9 @@ type SwipeableGridProps = {
   orientation: "vertical" | "horizontal";
   itemsPerSwipe: number;
   spacing?: GridSpacing;
+  isBlog?: boolean;
 };
+
 export const Overview = (props: OverviewDataTypes) => {
   const { region, population, adolescents } = props;
 
@@ -56,14 +69,62 @@ export const Overview = (props: OverviewDataTypes) => {
   );
 };
 
+const Blog = ({ bgImage, title }: { bgImage?: string; title?: string }) => {
+  const navigate = useNavigate();
+  const handleClick = useCallback(() => {
+    navigate("/blog/:1");
+  }, [navigate]);
+  
+  return (
+    <Box
+      px={0.5}
+      py={0.5}
+      component={ButtonBase}
+      onClick={handleClick}
+      sx={{
+        backgroundImage: bgImage ? `url(${bgImage})` : "none",
+        minWidth: 300,
+        minHeight: 150,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        alignItems: "flex-end",
+      }}
+    >
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        px={1}
+        py={0.5}
+        sx={{
+          backdropFilter: "blur(30px)",
+          WebkitBackdropFilter: "blur(30)",
+          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          minWidth: "100%",
+        }}
+      >
+        <Typography fontWeight={"bold"} variant="caption">
+          {title}
+        </Typography>
+        <Avatar sx={{ border: "none", width: 16, height: 16 }}>
+          <ArrowForwardRounded color={"primary"} fontSize="small" />
+        </Avatar>
+      </Stack>
+    </Box>
+  );
+};
+
 const SwipeableGrid: React.FC<SwipeableGridProps> = ({
   items,
   orientation,
   itemsPerSwipe,
   spacing = 2,
+  isBlog,
 }) => {
   const [activePage, setActivePage] = useState(0);
   const numPages = Math.ceil(items.length / itemsPerSwipe);
+  console.log(items);
 
   const handlePrevPage = () => {
     setActivePage((prevPage) => Math.max(0, prevPage - 1));
@@ -80,10 +141,26 @@ const SwipeableGrid: React.FC<SwipeableGridProps> = ({
   const itemWidth = `${100 / itemsPerSwipe}%`;
 
   return (
-    <Box sx={{ maxWidth: "100%", overflow: "hidden" }}>
-      <Stack direction={"row"} alignItems={"center"}>
+    <Stack
+      sx={{ maxWidth: "100%", overflow: "hidden" }}
+      direction={orientation === "horizontal" ? "column" : "row"}
+      spacing={orientation === "horizontal" ? 0 : 3}
+      justifyContent={"center"}
+    >
+      <Stack
+        direction={orientation === "horizontal" ? "row" : "column"}
+        alignItems={"center"}
+      >
         <IconButton onClick={handlePrevPage} disabled={activePage === 0}>
-          <ArrowBackRounded color={activePage === 0 ? "disabled" : "primary"} />
+          {orientation === "horizontal" ? (
+            <ArrowBackRounded
+              color={activePage === 0 ? "disabled" : "primary"}
+            />
+          ) : (
+            <ArrowUpwardRounded
+              color={activePage === 0 ? "disabled" : "primary"}
+            />
+          )}
         </IconButton>
         <Box sx={{ flex: 1, overflow: "hidden" }}>
           <motion.div
@@ -105,10 +182,14 @@ const SwipeableGrid: React.FC<SwipeableGridProps> = ({
                   padding: { xs: "0px 0px 24px", md: spacing },
                 }}
               >
-                <MissionCard
-                  secondary={true}
-                  element={<Overview {...overview} />}
-                />
+                {isBlog ? (
+                  <Blog bgImage={overview.bgImage} title={overview.title} />
+                ) : (
+                  <MissionCard
+                    secondary={true}
+                    element={<Overview {...overview} />}
+                  />
+                )}
               </Box>
             ))}
           </motion.div>
@@ -117,15 +198,20 @@ const SwipeableGrid: React.FC<SwipeableGridProps> = ({
           onClick={handleNextPage}
           disabled={activePage === numPages - 1}
         >
-          <ArrowForwardRounded
-            color={activePage === numPages - 1 ? "disabled" : "primary"}
-          />
+          {orientation === "horizontal" ? (
+            <ArrowForwardRounded
+              color={activePage === numPages - 1 ? "disabled" : "primary"}
+            />
+          ) : (
+            <ArrowDownwardOutlined
+              color={activePage === numPages - 1 ? "disabled" : "primary"}
+            />
+          )}
         </IconButton>
       </Stack>
 
-      {/* Indicators */}
       <Stack
-        direction={"row"}
+        direction={orientation === "horizontal" ? "row" : "column"}
         alignItems={"center"}
         justifyContent={"center"}
         spacing={{ xs: 1, md: 2 }}
@@ -152,7 +238,7 @@ const SwipeableGrid: React.FC<SwipeableGridProps> = ({
           />
         ))}
       </Stack>
-    </Box>
+    </Stack>
   );
 };
 
