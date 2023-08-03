@@ -1,15 +1,9 @@
 import { motion } from "framer-motion";
-import {
-  Grid,
-  Theme,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { ReactNode, useState } from "react";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   card: {
     width: "100%",
     borderBottom: "8px solid #4F9A21",

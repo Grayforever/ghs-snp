@@ -1,8 +1,4 @@
-import { Card, CardContent, Typography, Stack, Theme } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-const useStyles = makeStyles((theme: Theme) => ({
-  container: {},
-}));
+import { Card, CardContent, Typography, Stack } from "@mui/material";
 
 const positionMe = {
   position: "relative",
@@ -16,7 +12,6 @@ type LeaderCardTypes = {
   sup?: string;
 };
 const LeaderCard = (props: LeaderCardTypes) => {
-  const classes = useStyles();
   return (
     <Card
       sx={{

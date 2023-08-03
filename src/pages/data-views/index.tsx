@@ -191,6 +191,11 @@ const DataViews = () => {
       <Card sx={{ borderRadius: 5 }}>
         <CardContent>
           <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+              <ChartCard               
+                title={"Number of Implementing Facilities"}
+              />
+            </Grid>
             <Grid item xs={12} md={6}>
               <ChartCard
                 error
@@ -198,25 +203,28 @@ const DataViews = () => {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <ChartCard title={"Number of Home Visits Done"} />
+              <ChartCard title={"Average Number of Home Visits"} />
             </Grid>
             <Grid item xs={12} md={6}>
               <ChartCard
                 error
-                title={"Number of Support Group Meetings Carried Out"}
+                title={"Number with Adequate Support"}
               />
             </Grid>
             <Grid item xs={12} md={6}>
               <ChartCard
                 error
-                title={"Number of Girls Attending Support Group Meetings"}
+                title={"Number who have Delivered (skilled delivery)"}
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <ChartCard error title={"Number Referred to GES"} />
+              <ChartCard error title={"Number Referred to Girls Officer (GES)"} />
             </Grid>
             <Grid item xs={12} md={6}>
-              <ChartCard title={"Number Educated on MCH Services"} />
+              <ChartCard title={"Number Referred to DoVVSU"} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <ChartCard title={"Number who have Accepted Postpartum Family Planning"} />
             </Grid>
           </Grid>
         </CardContent>

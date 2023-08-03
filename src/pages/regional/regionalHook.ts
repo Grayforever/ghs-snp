@@ -71,7 +71,7 @@ const RegionalHook = () => {
   const [active, setActive] = React.useState<string>("");
 
   const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _: React.MouseEvent<HTMLElement>,
     newAlignment: string
   ) => {
     setActive(newAlignment);

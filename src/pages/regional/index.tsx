@@ -91,7 +91,7 @@ const Regional: React.FC<RegionalProps> = ({
           </Card>
         )}
 
-        {/* <CustomTable data={sampleData} /> */}
+        <CustomTable data={sampleData} />
       </Stack>
     </Box>
   );
