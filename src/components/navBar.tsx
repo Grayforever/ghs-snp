@@ -135,7 +135,11 @@ const NavBar = () => {
                 <List>
                   {routes.map((page) => {
                     return page.headernav ? (
-                      <ListItemButton key={page.name} href={page.path}>
+                      <ListItemButton
+                        key={page.name}
+                        component={NavLink}
+                        to={page.path}
+                      >
                         <ListItemText primary={page.name} />
                       </ListItemButton>
                     ) : null;

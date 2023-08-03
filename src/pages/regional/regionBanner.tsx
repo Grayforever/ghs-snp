@@ -3,11 +3,7 @@ import { makeStyles } from "@mui/styles";
 import * as React from "react";
 import CustomSelect from "../../components/customSelect";
 import RegionalHook, { ButtonTypes, RegionalProps } from "./regionalHook";
-
-type HandleChangeFunction = (
-  event: React.MouseEvent<HTMLElement>,
-  newAlignment: string
-) => void;
+import { useSharedState } from "../../context/sharedSlateContext";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,14 +41,19 @@ const RegionalBanner: React.FC<RegionalProps> = ({
   const {
     toggleButtons,
     regions,
-    handleChange,
-    active,
   }: {
     toggleButtons: ButtonTypes[];
     regions: string[];
-    handleChange: HandleChangeFunction;
-    active: string;
   } = regionalHook;
+
+  const { sharedState, setSharedState } = useSharedState();
+
+  const handleChange = (
+    _: React.MouseEvent<HTMLElement, MouseEvent>,
+    value: string
+  ): void => {
+    setSharedState(value);
+  };
 
   const handleSelect = (item: string) => {
     console.log(`Selected item: ${item}`);
@@ -69,7 +70,7 @@ const RegionalBanner: React.FC<RegionalProps> = ({
       <ToggleButtonGroup
         color="primary"
         className={classes.root}
-        value={active}
+        value={sharedState}
         exclusive
         sx={{ overflowX: "auto" }}
         onChange={handleChange}

@@ -6,6 +6,7 @@ import ScrollToTop from "./components/scrollToTop";
 import { Suspense } from "react";
 import Lottie from "lottie-react";
 import Loader from "./assets/json/loader.json";
+import { SharedStateProvider } from "./context/sharedSlateContext";
 
 function AppLayout() {
   return (
@@ -21,21 +22,23 @@ function AppLayout() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        <Route path={"/"} element={<AppLayout />}>
-          {routes.map((route) => (
-            <Route
-              key={route.name}
-              element={<route.element />}
-              path={route.path}
-              index={route.index}
-            />
-          ))}
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <SharedStateProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path={"/"} element={<AppLayout />}>
+            {routes.map((route) => (
+              <Route
+                key={route.name}
+                element={<route.element />}
+                path={route.path}
+                index={route.index}
+              />
+            ))}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </SharedStateProvider>
   );
 }
 

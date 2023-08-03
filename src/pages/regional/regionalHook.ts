@@ -1,11 +1,28 @@
-import * as React from "react";
+import { useSharedState } from "../../context/sharedSlateContext";
 
-export type DataItem = {
+export type DistrictTypes = {
+  sn: number;
   district: string;
   hospital: number;
   healthCenters: number;
   chps: number;
   privateChag: number;
+};
+
+export type ReportTypes = {
+  sn: number;
+  reportTitle: string;
+  dateUpdate: string;
+};
+
+export type InnovationTypes = {
+  sn: number;
+  practiceInnovation: string;
+  dateUpdate: string;
+};
+
+export type TableDataTypes = {
+  [key: string]: Array<DistrictTypes | InnovationTypes | ReportTypes>;
 };
 
 export interface RegionalProps {
@@ -17,8 +34,9 @@ export type ButtonTypes = {
   value: string;
 };
 
-const sampleData: DataItem[] = [
+const districts: DistrictTypes[] = [
   {
+    sn: 1,
     district: "District A",
     hospital: 5,
     healthCenters: 10,
@@ -26,6 +44,7 @@ const sampleData: DataItem[] = [
     privateChag: 20,
   },
   {
+    sn: 2,
     district: "District B",
     hospital: 8,
     healthCenters: 12,
@@ -33,11 +52,43 @@ const sampleData: DataItem[] = [
     privateChag: 25,
   },
   {
+    sn: 3,
     district: "District C",
     hospital: 7,
     healthCenters: 14,
     chps: 20,
     privateChag: 30,
+  },
+];
+
+const reports: ReportTypes[] = [
+  {
+    sn: 1,
+    reportTitle: "Greater Accra Safety Net Presentation 2023",
+    dateUpdate: "29-02-2023",
+  },
+  {
+    sn: 2,
+    reportTitle: "Greater Accra Safety Net Presentation 2022",
+    dateUpdate: "31-03-2022",
+  },
+  {
+    sn: 3,
+    reportTitle: "Greater Accra Safety Net Presentation 2021",
+    dateUpdate: "05-02-2021",
+  },
+  {
+    sn: 4,
+    reportTitle: "Greater Accra Safety Net Presentation 2020",
+    dateUpdate: "03-08-2020",
+  },
+];
+
+const innovations: InnovationTypes[] = [
+  {
+    sn: 1,
+    practiceInnovation: "A Adolescent - Friendly Reproductive Health Visit",
+    dateUpdate: "29-02-2023",
   },
 ];
 
@@ -67,16 +118,17 @@ const regions: string[] = [
   "North East Region",
 ];
 
-const RegionalHook = () => {
-  const [active, setActive] = React.useState<string>("");
+const tableData = {
+  districts: districts,
+  facilities: districts,
+  reports: reports,
+  innovations: innovations,
+};
 
-  const handleChange = (
-    _: React.MouseEvent<HTMLElement>,
-    newAlignment: string
-  ) => {
-    setActive(newAlignment);
-  };
-  return { sampleData, toggleButtons, regions, active, handleChange };
+const RegionalHook = () => {
+  const { sharedState } = useSharedState();
+
+  return { toggleButtons, regions, sharedState, tableData };
 };
 
 export default RegionalHook;

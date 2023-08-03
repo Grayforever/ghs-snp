@@ -34,7 +34,7 @@ const routes = [
   {
     path: "/regional",
     exact: false,
-    name: "Regional",
+    name: "Reports",
     index: false,
     element: Regional,
     headernav: true,

@@ -7,21 +7,37 @@ import {
   CardMedia,
   CardHeader,
 } from "@mui/material";
-import Doctor from "../../assets/images/doctor_woman.png";
-import CustomTable from "../../components/customTable";
-import RegionalHook, { DataItem, RegionalProps } from "./regionalHook";
+import RegionalHook, { RegionalProps, TableDataTypes } from "./regionalHook";
+import EnhancedTable from "../../components/enhancedTable";
+import React from "react";
+import { SharedStateType } from "../../context/sharedSlateContext";
 
 const Regional: React.FC<RegionalProps> = ({
   regionalHook = RegionalHook(),
 }) => {
-  const { sampleData, active }: { sampleData: DataItem[]; active: string } =
-    regionalHook;
+  const {
+    sharedState,
+    tableData,
+  }: { sharedState: SharedStateType; tableData: TableDataTypes } = regionalHook;
+
+  function getTable(): React.ReactNode {
+    switch (sharedState) {
+      case "facilities":
+        return <EnhancedTable data={tableData[sharedState]} />;
+      case "reports":
+        return <EnhancedTable data={tableData[sharedState]} />;
+      case "districts":
+        return <EnhancedTable data={tableData[sharedState]} />;
+      default:
+        return <EnhancedTable data={tableData.districts} />;
+    }
+  }
 
   return (
     <Box pt={24} pb={{ xs: 6, md: 12 }}>
       <Stack mx={{ xs: 2, md: 5 }}>
-        {active !== "" ? (
-          <CustomTable data={sampleData} />
+        {/* {sharedState !== undefined ? (
+          <EnhancedTable data={data} />
         ) : (
           <Card
             sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
@@ -89,9 +105,8 @@ const Regional: React.FC<RegionalProps> = ({
               </Stack>
             </CardContent>
           </Card>
-        )}
-
-        <CustomTable data={sampleData} />
+        )} */}
+        {getTable()}
       </Stack>
     </Box>
   );

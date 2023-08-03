@@ -74,7 +74,7 @@ const Blog = ({ bgImage, title }: { bgImage?: string; title?: string }) => {
   const handleClick = useCallback(() => {
     navigate("/blog/:1");
   }, [navigate]);
-  
+
   return (
     <Box
       px={0.5}
@@ -124,7 +124,6 @@ const SwipeableGrid: React.FC<SwipeableGridProps> = ({
 }) => {
   const [activePage, setActivePage] = useState(0);
   const numPages = Math.ceil(items.length / itemsPerSwipe);
-  console.log(items);
 
   const handlePrevPage = () => {
     setActivePage((prevPage) => Math.max(0, prevPage - 1));
