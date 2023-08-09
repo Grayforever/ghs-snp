@@ -7,12 +7,19 @@ import { Suspense } from "react";
 import Lottie from "lottie-react";
 import Loader from "./assets/json/loader.json";
 import { SharedStateProvider } from "./context/sharedSlateContext";
+import { Container } from "@mui/material";
 
 function AppLayout() {
   return (
     <>
       <NavBar />
-      <Suspense fallback={<Lottie animationData={Loader} />}>
+      <Suspense
+        fallback={
+          <Container>
+            <Lottie animationData={Loader} />
+          </Container>
+        }
+      >
         <Outlet />
       </Suspense>
       <Footer />
