@@ -1,4 +1,7 @@
 import { useSharedState } from "../../context/sharedSlateContext";
+export type GhanaDistricts = {
+  [region: string]: string[];
+};
 
 export type DistrictTypes = {
   sn: number;
@@ -109,7 +112,7 @@ const regions: string[] = [
   "Upper East Region",
   "Upper West Region",
   "Western North Region",
-  "Savanah Region",
+  "Savannah Region",
   "Northern Region",
   "Bono East Region",
   "Oti Region",
@@ -117,6 +120,56 @@ const regions: string[] = [
   "Western Region",
   "North East Region",
 ];
+
+const ghanaDistricts: GhanaDistricts = {
+  "Greater Accra Region": ["Accra", "Tema", "Ga West", "Adenta", "Ashaiman"],
+  "Ashanti Region": [
+    "Kumasi",
+    "Obuasi",
+    "Asokore Mampong",
+    "Effiduase",
+    "Bekwai",
+  ],
+  "Eastern Region": ["Koforidua", "Nkawkaw", "Akim Oda", "Suhum", "Akropong"],
+  "Central Region": [
+    "Cape Coast",
+    "Kasoa",
+    "Mankessim",
+    "Winneba",
+    "Assin Fosu",
+  ],
+  "Western Region": ["Sekondi-Takoradi", "Tarkwa", "Axim", "Bibiani", "Bodi"],
+  "Western North Region": ["Sefwi Wiawso", "Juaboso", "Bia", "Enchi", "Bodi"],
+  "Volta Region": ["Ho", "Hohoe", "Keta", "Aflao", "Akatsi"],
+  "Oti Region": ["Dambai", "Jasikan", "Kadjebi", "Nkwanta", "Biakoye"],
+  "Northern Region": ["Tamale", "Yendi", "Savelugu", "Bimbilla", "Salaga"],
+  "North East Region": [
+    "Nalerigu",
+    "Walewale",
+    "Gambaga",
+    "Bunkpurugu",
+    "Chereponi",
+  ],
+  "Savannah Region": ["Damongo", "Buipe", "Salaga", "Sawla", "Yapei"],
+  "Upper East Region": ["Bolgatanga", "Navrongo", "Bawku", "Zebilla", "Paga"],
+  "Upper West Region": ["Wa", "Nadowli", "Lawra", "Jirapa", "Tumu"],
+  "Ahafo Region": [
+    "Goaso",
+    "Bechem",
+    "Duayaw Nkwanta",
+    "Tano South",
+    "Asunafo North",
+  ],
+  "Bono Region": ["Sunyani", "Berekum", "Techiman", "Nkoranza", "Wenchi"],
+  "Bono East Region": ["Kintampo", "Techiman", "Nkoranza", "Atebubu", "Pru"],
+  "Central East Region": [
+    "Akyem Tafo",
+    "Akyem Swedru",
+    "Asamankese",
+    "Akropong",
+    "Adukrom",
+  ],
+};
 
 const tableData = {
   districts: districts,
@@ -128,7 +181,19 @@ const tableData = {
 const RegionalHook = () => {
   const { sharedState } = useSharedState();
 
-  return { toggleButtons, regions, sharedState, tableData };
+  const getDistrictByRegion = (region: string): string[] => {
+    return ghanaDistricts[region];
+  };
+  const defaultDistricts = ghanaDistricts[regions[0]];
+
+  return {
+    toggleButtons,
+    regions,
+    sharedState,
+    tableData,
+    defaultDistricts,
+    getDistrictByRegion,
+  };
 };
 
 export default RegionalHook;

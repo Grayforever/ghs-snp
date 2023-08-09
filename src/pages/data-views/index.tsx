@@ -11,39 +11,78 @@ import {
   useMediaQuery,
   useTheme,
   Box,
+  Fab,
+  CircularProgress,
+  Theme,
+  Button,
 } from "@mui/material";
-import { TuneOutlined } from "@mui/icons-material";
+import { Done, FilterList, TuneOutlined } from "@mui/icons-material";
 import ChartCard from "./chartCard";
-import { useState } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import BubbleChart from "./bubbleChart";
+import RegionalHook from "../regional/regionalHook";
 
-const currencies = [
-  {
-    value: "USD",
-    label: "$",
-  },
-  {
-    value: "EUR",
-    label: "€",
-  },
-  {
-    value: "BTC",
-    label: "฿",
-  },
-  {
-    value: "JPY",
-    label: "¥",
-  },
-];
-
-const DataViews = () => {
+const DataViews = ({ regionalHook = RegionalHook() }) => {
+  const {
+    regions,
+    defaultDistricts,
+    getDistrictByRegion,
+  }: {
+    regions: string[];
+    defaultDistricts: string[];
+    getDistrictByRegion: (region: string) => string[];
+  } = regionalHook;
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
   const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [districts, setDistricts] = useState<string[]>(defaultDistricts);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const timer = useRef<number>();
+  const year = new Date().getFullYear();
+
+  const buttonSx = {
+    boxShadow: "none",
+    ...(success
+      ? {
+          bgcolor: (theme: Theme) => theme.palette.primary.main,
+          "&:hover": {
+            bgcolor: (theme: Theme) => theme.palette.primary.dark,
+          },
+        }
+      : null),
+  };
 
   function handleClick() {
     setShowFilter((prev) => !prev);
   }
+
+  const handleRegionChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const _districts = getDistrictByRegion(e.target.value);
+      setDistricts(_districts);
+    },
+    [getDistrictByRegion]
+  );
+
+  const handleFilter = () => {
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+      timer.current = window.setTimeout(() => {
+        setSuccess(true);
+        setLoading(false);
+      }, 2000);
+    }
+  };
+
+  useEffect(() => {
+    const current = timer.current;
+    return () => {
+      clearTimeout(current);
+    };
+  }, []);
+
   return (
     <Box px={{ xs: 2, md: 5 }}>
       <Stack
@@ -87,50 +126,70 @@ const DataViews = () => {
         {matches ? (
           <Stack
             direction={"row"}
+            alignItems={"center"}
             spacing={2}
             component={"form"}
             sx={{
-              "& .MuiTextField-root": { m: 1, width: "20ch" },
+              "& .MuiTextField-root": { m: 1, minWidth: "20ch" },
             }}
             noValidate
             autoComplete="off"
           >
             <TextField
               variant="outlined"
-              label="View By Region/District"
-              select
-              defaultValue={"EUR"}
-            >
-              {currencies.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              variant="outlined"
               label="Select Region"
               select
-              defaultValue={"EUR"}
+              defaultValue={regions[0]}
+              onChange={handleRegionChange}
             >
-              {currencies.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              {regions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
                 </MenuItem>
               ))}
             </TextField>
+
             <TextField
               variant="outlined"
-              label="Year"
+              label="View By District"
               select
-              defaultValue={"EUR"}
+              defaultValue={districts[0]}
+              disabled={defaultDistricts.length === 0}
             >
-              {currencies.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              {districts?.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
                 </MenuItem>
               ))}
             </TextField>
+            <TextField variant="outlined" label="Year" select>
+              {Array.from(new Array(50), (_, index) => (
+                <MenuItem key={index} value={year - index}>
+                  {year - index}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Box sx={{ m: 1, position: "relative" }}>
+              <Fab
+                aria-label="filter"
+                color="secondary"
+                sx={buttonSx}
+                onClick={handleFilter}
+              >
+                {success ? <Done /> : <FilterList />}
+              </Fab>
+              {loading && (
+                <CircularProgress
+                  size={68}
+                  sx={{
+                    position: "absolute",
+                    top: -6,
+                    left: -6,
+                    zIndex: 1,
+                  }}
+                />
+              )}
+            </Box>
           </Stack>
         ) : (
           <IconButton onClick={handleClick}>
@@ -140,95 +199,119 @@ const DataViews = () => {
       </Stack>
       <Collapse in={showFilter}>
         <Stack
-          direction={"row"}
           spacing={2}
           component={"form"}
           sx={{
-            "& .MuiTextField-root": { m: 1, width: "20ch" },
+            "& .MuiTextField-root": { m: 1, minWidth: "20ch" },
           }}
           noValidate
           autoComplete="off"
         >
           <TextField
             variant="outlined"
-            label="View By Region/District"
-            select
-            defaultValue={"EUR"}
-          >
-            {currencies.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            variant="outlined"
             label="Select Region"
             select
-            defaultValue={"EUR"}
+            defaultValue={regions[0]}
+            onChange={handleRegionChange}
           >
-            {currencies.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            {regions.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
               </MenuItem>
             ))}
           </TextField>
+
           <TextField
             variant="outlined"
-            label="Year"
+            label="View By District"
             select
-            defaultValue={"EUR"}
+            defaultValue={districts[0]}
+            disabled={defaultDistricts.length === 0}
           >
-            {currencies.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            {districts?.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
               </MenuItem>
             ))}
           </TextField>
+          <Stack direction="row" justifyContent={"space-between"}>
+            <TextField variant="outlined" label="Year" select fullWidth>
+              {Array.from(new Array(50), (_, index) => (
+                <MenuItem key={index} value={year - index}>
+                  {year - index}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Box sx={{ m: 1, position: "relative" }}>
+              <Fab
+                aria-label="filter"
+                color="secondary"
+                sx={buttonSx}
+                onClick={handleFilter}
+              >
+                {success ? <Done /> : <FilterList />}
+              </Fab>
+              {loading && (
+                <CircularProgress
+                  size={68}
+                  sx={{
+                    position: "absolute",
+                    top: -6,
+                    left: -6,
+                    zIndex: 1,
+                  }}
+                />
+              )}
+            </Box>
+          </Stack>
         </Stack>
       </Collapse>
 
-      <Card sx={{ borderRadius: 5 }}>
-        <CardContent>
-          <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-              <ChartCard               
-                title={"Number of Implementing Facilities"}
-              />
+      {loading ? null : (
+        <Card sx={{ borderRadius: 5 }}>
+          <CardContent>
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={6}>
+                <ChartCard title={"Number of Implementing Facilities"} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ChartCard
+                  error
+                  title={
+                    "Number of Pregnant Adolescents Enrolled To Safety Net"
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ChartCard title={"Average Number of Home Visits"} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ChartCard error title={"Number with Adequate Support"} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ChartCard
+                  error
+                  title={"Number who have Delivered (skilled delivery)"}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ChartCard
+                  error
+                  title={"Number Referred to Girls Officer (GES)"}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ChartCard title={"Number Referred to DoVVSU"} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ChartCard
+                  title={"Number who have Accepted Postpartum Family Planning"}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <ChartCard
-                error
-                title={"Number of Pregnant Adolescents Enrolled To Safety Net"}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <ChartCard title={"Average Number of Home Visits"} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <ChartCard
-                error
-                title={"Number with Adequate Support"}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <ChartCard
-                error
-                title={"Number who have Delivered (skilled delivery)"}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <ChartCard error title={"Number Referred to Girls Officer (GES)"} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <ChartCard title={"Number Referred to DoVVSU"} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <ChartCard title={"Number who have Accepted Postpartum Family Planning"} />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </Box>
   );
 };
