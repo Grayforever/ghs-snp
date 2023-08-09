@@ -16,7 +16,7 @@ function AppLayout() {
       <Suspense
         fallback={
           <Container>
-            <Lottie animationData={Loader} />
+            <Lottie animationData={Loader} width={360} height={360} />
           </Container>
         }
       >
