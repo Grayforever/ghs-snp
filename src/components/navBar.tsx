@@ -18,9 +18,9 @@ import Logo from "../assets/images/ghs_logo.png";
 import Image from "./image";
 import Banner from "./banner";
 import FaqBanner from "../pages/faq/faqBanner";
-import { LearnBanner } from "../pages/learn";
-import { BlogBanner } from "../pages/blog";
-import { LetsTalkBanner } from "../pages/lets-talk";
+import LearnBanner from "../pages/learn/learnBanner";
+import BlogBanner from "../pages/blog/blogBanner";
+import LetsTalkBanner from "../pages/lets-talk/letsTalkBanner";
 import RegionalBanner from "../pages/regional/regionBanner";
 import usePathPattern from "../hooks/useCurrentPath";
 

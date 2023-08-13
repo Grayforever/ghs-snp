@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import LearnCard from "./learnCard";
 import LearnBg1 from "../../assets/images/learn_bg1.png";
 import LearnBg2 from "../../assets/images/learn_bg2.png";
@@ -6,7 +6,6 @@ import LearnBg3 from "../../assets/images/learn_bg3.png";
 import LearnBg4 from "../../assets/images/learn_bg4.png";
 import LearnBg5 from "../../assets/images/learn_bg5.png";
 import LearnBg6 from "../../assets/images/learn_bg6.png";
-import { SearchOutlined } from "@mui/icons-material";
 
 const data = [
   {
@@ -52,27 +51,6 @@ const data = [
     bgImage: LearnBg6,
   },
 ];
-
-export const LearnBanner = () => (
-  <Stack spacing={2} sx={{ width: "100%" }}>
-    <TextField
-      variant="standard"
-      InputProps={{ startAdornment: <SearchOutlined color="primary" /> }}
-      placeholder={"Search Item here"}
-      sx={{ width: "100%" }}
-    />
-    <Stack
-      direction={"row"}
-      spacing={1}
-      sx={{ width: "100%" }}
-      justifyContent={"space-around"}
-    >
-      {["All", "Learn", "More", "Other"].map((label) => (
-        <Button key={label}>{label}</Button>
-      ))}
-    </Stack>
-  </Stack>
-);
 
 const Learn = () => {
   return (

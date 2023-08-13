@@ -1,29 +1,25 @@
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import React, { ReactNode, createContext, useMemo, useState } from "react";
 
-export type SharedStateType = string | undefined;
+export type SharedStateType = string | null;
 
 interface SharedStateContextType {
   sharedState: SharedStateType;
   setSharedState: React.Dispatch<React.SetStateAction<SharedStateType>>;
 }
 
-const SharedStateContext = createContext<SharedStateContextType | undefined>(
-  undefined
-);
-
-export const useSharedState = (): SharedStateContextType => {
-  const context = useContext(SharedStateContext);
-  if (!context) {
-    throw new Error("useSharedState must be used within a SharedStateProvider");
-  }
-  return context;
-};
+export const SharedStateContext = createContext<
+  SharedStateContextType | undefined
+>(undefined);
 
 export const SharedStateProvider = ({ children }: { children: ReactNode }) => {
   const [sharedState, setSharedState] = useState<SharedStateType>("districts");
 
+  const val = useMemo(() => {
+    return { sharedState, setSharedState };
+  }, [sharedState]);
+
   return (
-    <SharedStateContext.Provider value={{ sharedState, setSharedState }}>
+    <SharedStateContext.Provider value={val}>
       {children}
     </SharedStateContext.Provider>
   );

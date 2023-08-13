@@ -1,11 +1,10 @@
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
+import { Box, Button, Grid, Stack } from "@mui/material";
 import BlogBg1 from "../../assets/images/blog_bg1.png";
 import BlogBg2 from "../../assets/images/blog_bg2.png";
 import BlogBg3 from "../../assets/images/blog_bg3.png";
 import BlogBg4 from "../../assets/images/blog_bg4.png";
 import BlogBg5 from "../../assets/images/blog_bg5.png";
 import BlogBg6 from "../../assets/images/blog_bg6.png";
-import { SearchOutlined } from "@mui/icons-material";
 import BlogCard from "./blogCard";
 import Image from "../../components/image";
 import SafetyNet from "../../assets/images/safety_net_only.png";
@@ -54,27 +53,6 @@ const data = [
     bgImage: BlogBg6,
   },
 ];
-
-export const BlogBanner = () => (
-  <Stack spacing={2} sx={{ width: "100%" }}>
-    <TextField
-      variant="standard"
-      InputProps={{ startAdornment: <SearchOutlined color="primary" /> }}
-      placeholder={"Search Item here"}
-      sx={{ width: "100%" }}
-    />
-    <Stack
-      direction={"row"}
-      spacing={1}
-      sx={{ width: "100%" }}
-      justifyContent={"space-around"}
-    >
-      {["All", "Blog", "More", "Other"].map((label) => (
-        <Button key={label}>{label}</Button>
-      ))}
-    </Stack>
-  </Stack>
-);
 
 const Blog = () => {
   return (

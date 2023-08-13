@@ -1,4 +1,5 @@
-import { useSharedState } from "../../context/sharedSlateContext";
+import { useSharedState } from "../../hooks/useSharedState";
+
 export type GhanaDistricts = {
   [region: string]: string[];
 };
@@ -8,8 +9,8 @@ export type DistrictTypes = {
   district: string;
   hospital: number;
   healthCenters: number;
-  chps: number;
-  privateChag: number;
+  CHPS: number;
+  "Private/CHAG": number;
 };
 
 export type ReportTypes = {
@@ -40,27 +41,27 @@ export type ButtonTypes = {
 const districts: DistrictTypes[] = [
   {
     sn: 1,
-    district: "District A",
+    district: "Ketu South",
     hospital: 5,
     healthCenters: 10,
-    chps: 15,
-    privateChag: 20,
+    CHPS: 15,
+    "Private/CHAG": 20,
   },
   {
     sn: 2,
-    district: "District B",
+    district: "North Dayi",
     hospital: 8,
     healthCenters: 12,
-    chps: 18,
-    privateChag: 25,
+    CHPS: 18,
+    "Private/CHAG": 25,
   },
   {
     sn: 3,
-    district: "District C",
+    district: "Akatsi North",
     hospital: 7,
     healthCenters: 14,
-    chps: 20,
-    privateChag: 30,
+    CHPS: 20,
+    "Private/CHAG": 30,
   },
 ];
 

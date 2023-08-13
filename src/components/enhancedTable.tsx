@@ -27,6 +27,7 @@ interface TableDataItem {
 
 interface TableProps {
   data: TableDataItem[];
+  onDownload?: () => void;
 }
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -143,10 +144,17 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  onDownloadStart?: () => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected, onDownloadStart } = props;
+
+  const handleDownload = React.useCallback(() => {
+    if (onDownloadStart) {
+      onDownloadStart();
+    }
+  }, [onDownloadStart]);
 
   return (
     <Toolbar
@@ -183,7 +191,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       )}
       {numSelected > 0 ? (
         <Tooltip title="Download">
-          <IconButton>
+          <IconButton onClick={handleDownload}>
             <DownloadIcon color={numSelected ? "success" : "inherit"} />
           </IconButton>
         </Tooltip>
@@ -192,7 +200,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-const EnhancedTable: React.FC<TableProps> = ({ data }) => {
+const EnhancedTable: React.FC<TableProps> = ({ data, onDownload }) => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [newData, setNewData] = React.useState<TableDataItem[]>(data);
   const [orderBy, setOrderBy] = React.useState<keyof TableDataItem>("");
@@ -223,7 +231,6 @@ const EnhancedTable: React.FC<TableProps> = ({ data }) => {
     sn: ValueType
   ) => {
     const selectedIndex = selected.indexOf(sn);
-    console.log(selectedIndex);
     let newSelected: readonly ValueType[] = [];
 
     if (selectedIndex === -1) {
@@ -280,7 +287,10 @@ const EnhancedTable: React.FC<TableProps> = ({ data }) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          onDownloadStart={onDownload}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

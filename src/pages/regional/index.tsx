@@ -1,8 +1,9 @@
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Snackbar, Button, IconButton } from "@mui/material";
 import RegionalHook, { RegionalProps, TableDataTypes } from "./regionalHook";
 import EnhancedTable from "../../components/enhancedTable";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { SharedStateType } from "../../context/sharedSlateContext";
+import { CloseRounded } from "@mui/icons-material";
 
 const Regional: React.FC<RegionalProps> = ({
   regionalHook = RegionalHook(),
@@ -11,23 +12,65 @@ const Regional: React.FC<RegionalProps> = ({
     sharedState,
     tableData,
   }: { sharedState: SharedStateType; tableData: TableDataTypes } = regionalHook;
+  const [open, setOpen] = React.useState(false);
 
-  function getTable(): React.ReactNode {
-    switch (sharedState) {
-      case "facilities":
-        return <EnhancedTable data={tableData[sharedState]} />;
-      case "reports":
-        return <EnhancedTable data={tableData[sharedState]} />;
-      case "districts":
-        return <EnhancedTable data={tableData[sharedState]} />;
-      default:
-        return <EnhancedTable data={tableData.districts} />;
-    }
-  }
+  const handleDownload = useCallback(() => {
+    setOpen(true);
+  }, []);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  const action = useMemo(() => {
+    return (
+      <React.Fragment>
+        <Button size="small" onClick={handleClose}>
+          Retry Here
+        </Button>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={handleClose}
+        >
+          <CloseRounded fontSize="small" />
+        </IconButton>
+      </React.Fragment>
+    );
+  }, [handleClose]);
 
   return (
     <Box pt={24} pb={{ xs: 6, md: 12 }}>
-      <Stack mx={{ xs: 2, md: 5 }}>{getTable()}</Stack>
+      <Stack mx={{ xs: 2, md: 5 }}>
+        {sharedState?.toString() === "districts" ? (
+          <EnhancedTable
+            data={tableData.districts}
+            onDownload={handleDownload}
+          />
+        ) : null}
+        {sharedState?.toString() === "innovations" ? (
+          <EnhancedTable
+            data={tableData.innovations}
+            onDownload={handleDownload}
+          />
+        ) : null}
+        {sharedState?.toString() === "facilities" ? (
+          <EnhancedTable
+            data={tableData.facilities}
+            onDownload={handleDownload}
+          />
+        ) : null}
+        {sharedState?.toString() === "reports" ? (
+          <EnhancedTable data={tableData.reports} onDownload={handleDownload} />
+        ) : null}
+      </Stack>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Download Started"
+        action={action}
+      />
     </Box>
   );
 };
