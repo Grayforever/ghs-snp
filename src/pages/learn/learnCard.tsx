@@ -110,7 +110,7 @@ const LearnCard: React.FC<CardPropTypes> = (props) => {
   };
 
   const handleCardClick = () => {
-    navigate(`/learn/:${props.id}`);
+    navigate(`/resources/:${props.id}`);
   };
 
   return (

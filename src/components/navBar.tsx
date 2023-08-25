@@ -28,8 +28,8 @@ function bannerByPath(path: string | undefined) {
   switch (path) {
     case "/regional":
       return <RegionalBanner />;
-    case "/learn":
-    case "/learn/:id":
+    case "/resources":
+    case "/resources/:id":
       return <LearnBanner />;
     case "/blog":
     case "/blog/:id":
