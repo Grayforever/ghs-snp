@@ -1,8 +1,7 @@
 import { useContext } from "react";
 import { SharedStateContext } from "../context/sharedSlateContext";
 
-export type SharedStateType = string | null;
-
+export type SharedStateType = [string | null, string | null];
 interface SharedStateContextType {
   sharedState: SharedStateType;
   setSharedState: React.Dispatch<React.SetStateAction<SharedStateType>>;

@@ -50,21 +50,31 @@ const RegionalBanner: React.FC<RegionalProps> = ({
 
   const handleChange = (
     _: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: string | null
+    value: string | null,
   ): void => {
     if (value !== null) {
-      setSharedState(value);
+      setSharedState((prev) => [value, prev[1]]);
     }
+  };
+
+  const handleSelect = (item: string) => {
+    setSharedState((prev) => [prev[0], item]);
   };
 
   return (
     <Stack sx={{ width: "100%" }}>
-      <CustomSelect items={regions} defaultValue={regions[0]} />
+      <CustomSelect
+        items={regions}
+        defaultValue={regions[0]}
+        onSelect={(item) => {
+          handleSelect(item);
+        }}
+      />
 
       <ToggleButtonGroup
         color="primary"
         className={classes.root}
-        value={sharedState}
+        value={sharedState[0]}
         exclusive
         sx={{ overflowX: "auto" }}
         onChange={handleChange}

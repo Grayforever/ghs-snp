@@ -98,9 +98,7 @@ const innovations: InnovationTypes[] = [
 
 const toggleButtons: ButtonTypes[] = [
   { label: "Implementing Districts", value: "districts" },
-  { label: "Implementing Health Facilities", value: "facilities" },
   { label: "Regional Reports", value: "reports" },
-  { label: "Best Practices/Innovations", value: "innovations" },
 ];
 
 const regions: string[] = [
