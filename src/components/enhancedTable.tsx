@@ -15,19 +15,19 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Switch from "@mui/material/Switch";
-import DownloadIcon from "@mui/icons-material/Download";
+import LaunchIcon from "@mui/icons-material/Launch";
 import { visuallyHidden } from "@mui/utils";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import Image from "./image";
 
 type ValueType = boolean | string | number;
-interface TableDataItem {
+export interface TableDataItem {
   [key: string]: ValueType;
 }
 
 interface TableProps {
   data: TableDataItem[];
-  onDownload?: () => void;
+  onLaunch?: (tableDataItem: TableDataItem | undefined) => void;
 }
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -54,10 +54,10 @@ type Order = "asc" | "desc";
 
 function getComparator<Key extends keyof any>(
   order: Order,
-  orderBy: Key
+  orderBy: Key,
 ): (
   a: { [key in Key]: number | string | boolean },
-  b: { [key in Key]: number | string | boolean }
+  b: { [key in Key]: number | string | boolean },
 ) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -65,7 +65,7 @@ function getComparator<Key extends keyof any>(
 }
 function stableSort<T>(
   array: readonly T[],
-  comparator: (a: T, b: T) => number
+  comparator: (a: T, b: T) => number,
 ) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
@@ -82,7 +82,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof TableDataItem
+    property: keyof TableDataItem,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -127,7 +127,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             >
               {headCell.replace(
                 /([a-z](?=[A-Z]))/g,
-                `$1${headCell.includes("onOff") ? "/" : " "}`
+                `$1${headCell.includes("onOff") ? "/" : " "}`,
               )}
               {orderBy === headCell ? (
                 <Box component="span" sx={visuallyHidden}>
@@ -144,17 +144,17 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  onDownloadStart?: () => void;
+  onLaunch?: () => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, onDownloadStart } = props;
+  const { numSelected, onLaunch } = props;
 
-  const handleDownload = React.useCallback(() => {
-    if (onDownloadStart) {
-      onDownloadStart();
+  const handleLaunch = React.useCallback(() => {
+    if (onLaunch) {
+      onLaunch();
     }
-  }, [onDownloadStart]);
+  }, [onLaunch]);
 
   return (
     <Toolbar
@@ -165,7 +165,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           bgcolor: (theme) =>
             alpha(
               theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
+              theme.palette.action.activatedOpacity,
             ),
         }),
       }}
@@ -189,10 +189,10 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           Data
         </Typography>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Download">
-          <IconButton onClick={handleDownload}>
-            <DownloadIcon color={numSelected ? "success" : "inherit"} />
+      {numSelected === 1 ? (
+        <Tooltip title="Open">
+          <IconButton onClick={handleLaunch}>
+            <LaunchIcon color={numSelected ? "success" : "inherit"} />
           </IconButton>
         </Tooltip>
       ) : null}
@@ -200,17 +200,19 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-const EnhancedTable: React.FC<TableProps> = ({ data, onDownload }) => {
+const EnhancedTable: React.FC<TableProps> = ({ data, onLaunch }) => {
   const [order, setOrder] = React.useState<Order>("asc");
   const [newData, setNewData] = React.useState<TableDataItem[]>(data);
   const [orderBy, setOrderBy] = React.useState<keyof TableDataItem>("");
   const [selected, setSelected] = React.useState<readonly ValueType[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [selectedIndex, setSelectedIndex] = React.useState<ValueType>(0);
 
+  const isSelected = (sn: ValueType) => selected.indexOf(sn) !== -1;
   const handleRequestSort = (
     _: React.MouseEvent<unknown>,
-    property: keyof TableDataItem
+    property: keyof TableDataItem,
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -228,7 +230,7 @@ const EnhancedTable: React.FC<TableProps> = ({ data, onDownload }) => {
 
   const handleClick = (
     _: React.ChangeEvent<HTMLInputElement>,
-    sn: ValueType
+    sn: ValueType,
   ) => {
     const selectedIndex = selected.indexOf(sn);
     let newSelected: readonly ValueType[] = [];
@@ -242,10 +244,10 @@ const EnhancedTable: React.FC<TableProps> = ({ data, onDownload }) => {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        selected.slice(selectedIndex + 1),
       );
     }
-
+    setSelectedIndex(sn);
     setSelected(newSelected);
   };
 
@@ -254,7 +256,7 @@ const EnhancedTable: React.FC<TableProps> = ({ data, onDownload }) => {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -262,15 +264,13 @@ const EnhancedTable: React.FC<TableProps> = ({ data, onDownload }) => {
 
   const handleSwitchChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    sn: ValueType
+    sn: ValueType,
   ) => {
     const incoming = newData.map((row) =>
-      row.sn === sn ? { ...row, onOff: event.target.checked } : row
+      row.sn === sn ? { ...row, onOff: event.target.checked } : row,
     );
     setNewData(incoming);
   };
-
-  const isSelected = (sn: ValueType) => selected.indexOf(sn) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - newData.length) : 0;
@@ -279,17 +279,24 @@ const EnhancedTable: React.FC<TableProps> = ({ data, onDownload }) => {
     () =>
       stableSort(newData, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
+        page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage, newData]
+    [order, orderBy, page, rowsPerPage, newData],
   );
+
+  const handleLaunch = () => {
+    const item = data.find((x) => x.sn === selectedIndex);
+    if (onLaunch) {
+      onLaunch(item);
+    }
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
-          onDownloadStart={onDownload}
+          onLaunch={handleLaunch}
         />
         <TableContainer>
           <Table

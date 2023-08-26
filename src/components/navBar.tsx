@@ -26,7 +26,8 @@ import usePathPattern from "../hooks/useCurrentPath";
 
 function bannerByPath(path: string | undefined) {
   switch (path) {
-    case "/regional":
+    case "/reports":
+    case "/reports/:id":
       return <RegionalBanner />;
     case "/resources":
     case "/resources/:id":

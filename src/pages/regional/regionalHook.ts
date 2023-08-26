@@ -1,4 +1,7 @@
 import { useSharedState } from "../../hooks/useSharedState";
+import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import { TableDataItem } from "../../components/enhancedTable.tsx";
 
 export type GhanaDistricts = {
   [region: string]: string[];
@@ -185,6 +188,17 @@ const RegionalHook = () => {
   };
   const defaultDistricts = ghanaDistricts[regions[0]];
 
+  const navigate = useNavigate();
+
+  const handleLaunch = useCallback((item: TableDataItem | undefined) => {
+    if (item) {
+      const id = item.sn.toString();
+      navigate(`/reports/${id}`);
+    }
+  }, []);
+
+  const year = new Date().getFullYear();
+
   return {
     toggleButtons,
     regions,
@@ -192,6 +206,9 @@ const RegionalHook = () => {
     tableData,
     defaultDistricts,
     getDistrictByRegion,
+    handleLaunch,
+    year,
+    navigate,
   };
 };
 

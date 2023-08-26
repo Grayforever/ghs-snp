@@ -12,6 +12,7 @@ const Learn = lazy(() => import("./learn"));
 const LearnDetails = lazy(() => import("./learn/leardDetails"));
 const LetsTalk = lazy(() => import("./lets-talk"));
 const Regional = lazy(() => import("./regional"));
+const ReportDetails = lazy(() => import("./regional/reportDetails.tsx"));
 
 const routes = [
   { path: "/", exact: true, name: "Home", index: true, element: Home },
@@ -32,12 +33,19 @@ const routes = [
     headernav: true,
   },
   {
-    path: "/regional",
+    path: "/reports",
     exact: false,
     name: "Reports",
     index: false,
     element: Regional,
     headernav: true,
+  },
+  {
+    path: "/reports/:id",
+    exact: false,
+    name: "Report Details",
+    index: false,
+    element: ReportDetails,
   },
   {
     path: "/resources",
